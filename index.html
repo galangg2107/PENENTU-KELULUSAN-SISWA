@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Penentu Kelulusan Siswa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Program Penentu Kelulusan Siswa</h1>
+        <p class="subtitle">Sistem Perhitungan Nilai Siswa</p>
+
+        <form id="formKelulusan">
+
+            <label>Nama Siswa</label>
+            <input type="text" id="nama"
+                placeholder="Masukkan nama siswa" required>
+
+            <label>Nilai Tugas 1</label>
+            <input type="number" id="nilai1"
+                placeholder="Masukkan nilai 1" min="0" max="100" step="any" required>
+
+            <label>Nilai Tugas 2</label>
+            <input type="number" id="nilai2"
+                placeholder="Masukkan nilai 2" min="0" max="100" step="any" required>
+
+            <label>Nilai Tugas 3</label>
+            <input type="number" id="nilai3"
+                placeholder="Masukkan nilai 3" min="0" max="100" step="any" required>
+
+            <button type="submit">Hitung Kelulusan</button>
+            <button type="reset" class="reset">Reset</button>
+
+        </form>
+
+        <div id="hasil" class="hasil">
+            <h2>Hasil Kelulusan</h2>
+            <p id="output"></p>
+        </div>
+
+        <p class="footer">KKM yang digunakan: 78</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #eef2f7;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #1e3a5f;
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #777;
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 7px;
+    font-weight: bold;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 7px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+.reset {
+    background: #64748b;
+    margin-top: 10px;
+}
+
+.reset:hover {
+    background: #475569;
+}
+
+.hasil {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    line-height: 1.8;
+}
+
+.hasil h2 {
+    text-align: center;
+    color: #1e3a5f;
+    margin-bottom: 10px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #777;
+    font-size: 13px;
+}
+
+// Program Penentu Kelulusan Siswa
+
+const form = document.getElementById("formKelulusan");
+const hasil = document.getElementById("hasil");
+const output = document.getElementById("output");
+
+const KKM = 78;
+
+// Proses perhitungan kelulusan
+form.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    // 1. Mengambil input nama siswa
+    const nama = document.getElementById("nama").value;
+
+    // 2. Mengambil input nilai tugas
+    const nilai1 = Number(document.getElementById("nilai1").value);
+    const nilai2 = Number(document.getElementById("nilai2").value);
+    const nilai3 = Number(document.getElementById("nilai3").value);
+
+    // 3. Validasi nilai
+    if (
+        nilai1 < 0 || nilai1 > 100 ||
+        nilai2 < 0 || nilai2 > 100 ||
+        nilai3 < 0 || nilai3 > 100
+    ) {
+        alert("Nilai harus berada pada rentang 0-100!");
+        return;
+    }
+
+    // 4. Menghitung jumlah seluruh nilai
+    const jumlahNilai = nilai1 + nilai2 + nilai3;
+
+    // 5. Menghitung rata-rata
+    const rataRata = jumlahNilai / 3;
+
+    // 6. Menentukan status kelulusan
+    let status;
+
+    if (rataRata >= KKM) {
+        status = "LULUS";
+    } else {
+        status = "TIDAK LULUS";
+    }
+
+    // 7. Menampilkan hasil
+    output.innerHTML = `
+        Nama Siswa: ${nama}<br>
+        Nilai Tugas 1: ${nilai1}<br>
+        Nilai Tugas 2: ${nilai2}<br>
+        Nilai Tugas 3: ${nilai3}<br>
+        Jumlah Nilai: ${jumlahNilai}<br>
+        Rata-rata: ${rataRata.toFixed(2)}<br>
+        KKM: ${KKM}<br>
+        <strong>Keterangan: ${status}</strong>
+    `;
+
+    hasil.style.display = "block";
+});
+
+// Fungsi reset
+form.addEventListener("reset", function() {
+    hasil.style.display = "none";
+});
